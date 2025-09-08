@@ -1,0 +1,56 @@
+{
+"=== Commands ==="
+
+# 1. Director structure creation
+mkdir Work/Lab_1
+mkdir Work/Galenko_Aleksey_Vladimirovich
+
+# 2. Lab_1 rights
+chmod 774 Work/Lab_1
+
+# 3. Galenko_Aleksey_Vladimirovich rights
+chmod 200 Work/Galenko_Aleksey_Vladimirovich
+
+# 4. Touch three files
+touch Work/Text_@1
+touch Work/Text_\$2
+touch Work/Text_\#3
+
+# 5. Write text in 'Text @1' without any utilities
+echo "Птица говорун отличается умом и сообразительностью\nОтличается умом, отличается сообразительностью..." > Text_@1
+
+# 6. Data copying from Text_@1 to Text_$2
+cp "Text_@1" "Text_\$2"
+
+# 7. Zip files
+gzip "Text_@1"
+gzip "Text_#3"
+
+# 8. Add Zip files into archive
+tar -cf "MyAchiv.tar" "Text_@1.gz" "Text_#3.gz"
+
+# 9. Extract the first line from the "Text_@1" file and add it to the beginning of "Text_#3"
+gunzip "Text_@1.gz"
+gunzip "Text_#3.gz"
+head -n 1 "Text_@1" | cat - "Text_#3" > temp_file && mv temp_file "Text_#3"
+
+# 10. Add a line to the end of the "Text_#3" file
+echo "Будь осторожен! Преступник вооружен!" >> "Text_#3"
+
+# 11. Write the contents of the "Text_@1" file in reverse order to "Result_one"
+tac "Text_@1" > "Result_one"
+
+# 12. Renaming "Result_one" to "Result_two"
+mv "Result_one" "Result_two"
+
+# 13. Create a file with the contents of files and folders that start with "T" from the "Full Name" folder
+ls "../Galenko_Aleksey_Vladimirovich"/T* > "Result_3" 2>/dev/null || echo "Файлы на T не найдены" > "Result_3"
+
+# 14. Adding information about the system core
+uname -a >> "Result_3"
+
+# 15. Adding the current date
+date >> "Result_3"
+
+"================"
+}

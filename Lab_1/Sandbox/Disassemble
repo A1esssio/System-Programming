@@ -1,0 +1,11 @@
+Dump of assembler code for function main:
+   0x0000000000001149 <+0>:   endbr64
+   0x000000000000114d <+4>:   push   rbp
+   0x000000000000114e <+5>:	mov    rbp,rsp
+   0x0000000000001151 <+8>:	lea    rax,[rip+0xeac]        # 0x2004
+   0x0000000000001158 <+15>:	mov    rdi,rax
+   0x000000000000115b <+18>:	call   0x1050 <puts@plt>
+   0x0000000000001160 <+23>:	mov    eax,0x0
+   0x0000000000001165 <+28>:	pop    rbp
+   0x0000000000001166 <+29>:	ret
+End of assembler dump.
