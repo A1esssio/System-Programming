@@ -52,5 +52,8 @@ uname -a >> "Result_3"
 # 15. Adding the current date
 date >> "Result_3"
 
+# 16. Change Direction
+tac Text_@1 > Galenko_Aleksey_Vladimirovich/Result_two
+
 "================"
 }

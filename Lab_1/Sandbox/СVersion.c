@@ -3,7 +3,7 @@
 
 int main() {
     // Аналог вывода сообщения (более привычный способ в C)
-    puts("Alesssio Galesssio Vladimiro");  // puts автоматически добавляет \n
+    puts("Alesssio\nGalesssio\nVladimiro");  // puts автоматически добавляет \n
 
     // Завершение программы
     return 0;  // Аналог exit(0), но более идиоматично для main()
