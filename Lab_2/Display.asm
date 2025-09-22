@@ -3,14 +3,14 @@ format ELF64 executable 3
 entry start
 
 segment readable writeable
-    messageOption:
+    messageOptionProgram:
         db 'Choose one program:', 10, '1 - input string direction reverse', 10
         db '2 - if (length != 21) -> input string to matrix convertation,', 10
         db '    else -> triangular arrangement', 10
         db '3 - number digit sum', 10
     messageOptionEnd:
 
-    lengthMessageOption = messageOptionEnd - messageOption
+    lengthMessageOptionProgram = messageOptionEnd - messageOptionProgram
 
     messageInvalidOption:
         db 'Error: choose between 1, 2 and 3', 10, 10, 0
@@ -27,8 +27,8 @@ start:
     ; output
     mov rax, 1
     mov rdi, 1
-    mov rsi, messageOption
-    mov rdx, lengthMessageOption
+    mov rsi, messageOptionProgram
+    mov rdx, lengthMessageOptionProgram
     0x80
 
     ; input

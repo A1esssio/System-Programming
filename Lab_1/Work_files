@@ -20,7 +20,7 @@ touch Work/Text_\#3
 echo "Птица говорун отличается умом и сообразительностью\nОтличается умом, отличается сообразительностью..." > Text_@1
 
 # 6. Data copying from Text_@1 to Text_$2
-cp "Text_@1" "Text_\$2"
+cat "Text_@1" > "Text_\$2"
 
 # 7. Zip files
 gzip "Text_@1"

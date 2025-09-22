@@ -1,0 +1,9 @@
+total 48K
+-rw-rw-rw- 1 codespace codespace    0 Sep 22 21:49 Data.txt
+-rwxrwxrwx 1 codespace codespace  16K Sep 22 21:48 Display
+-rw-r--r-- 1 codespace codespace 1.7K Sep 19 08:33 Display.asm
+-rw-rw-rw- 1 codespace codespace  483 Sep 22 21:46 Display.c
+-rwxrwxrwx 1 codespace codespace 8.8K Sep 22 12:09 Display32
+-rw-rw-rw- 1 codespace codespace 9.0K Sep 22 12:11 Display32.asm
+
+"ls -lh > Data.txt"
