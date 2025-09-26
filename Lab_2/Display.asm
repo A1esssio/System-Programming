@@ -12,11 +12,11 @@ segment readable writeable
 
     lengthMessageOptionProgram = messageOptionEnd - messageOptionProgram
 
-    messageInvalidOption:
+    messageInvalidNumberArgument:
         db 'Error: choose between 1, 2 and 3', 10, 10, 0
     messageInvalidOptionEnd:
 
-    lengthMessageInvalidOption = messageInvalidOptionEnd - messageInvalidOption
+    lengthMessageInvalidNumberArgument = messageInvalidOptionEnd - messageInvalidNumberArgument
 
     bufferInput rb 2
     lengthInput db 0
@@ -60,8 +60,8 @@ start:
     invalidRangeInputMenu:
         mov rax, 1
         mov rdi, 1
-        mov rsi, messageInvalidOption
-        mov rdx, lengthMessageInvalidOption
+        mov rsi, messageInvalidNumberArgument
+        mov rdx, lengthMessageInvalidNumberArgument
         0x80
         jmp start 
     

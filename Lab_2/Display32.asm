@@ -66,11 +66,11 @@ section '.data' writeable
     messageOptionEnd:
     lengthMessageOptionProgram equ messageOptionEnd - messageOptionProgram
 
-    messageInvalidOption:
+    messageInvalidNumberArgument:
         db 0x1B, '[H', 0x1B, '[J'
         db 'Error: choose between 1, 2, 3 or 4', 10, 10
     messageInvalidOptionEnd:
-    lengthMessageInvalidOption equ messageInvalidOptionEnd - messageInvalidOption
+    lengthMessageInvalidNumberArgument equ messageInvalidOptionEnd - messageInvalidNumberArgument
 
     messageResult:
         db 'Result:'
@@ -98,20 +98,14 @@ section '.data' writeable
     lengthInput dd 0
     lengthOutput dd 0
 
-    lineNumber dd 0
-    currentIndent dd 0
-    charsNumber dd 0
-    BufferOutputPosition dd 0
-
 section '.bss' writeable
     bufferInput rb 256
     bufferOutput rb 256
     bufferCalculation rb 4
-    bufferResult rb 4
 
 section '.error' executable
     invalidRangeOption:
-        cout messageInvalidOption, lengthMessageInvalidOption
+        cout messageInvalidNumberArgument, lengthMessageInvalidNumberArgument
         jmp main
 
 section '.text' executable
@@ -285,7 +279,7 @@ main:
     executionFourth:
         cout terminalClear, 6
 
-        clearBuffer bufferOutput, 256
+        ; clearBuffer bufferOutput, 256
 
         push esi
         push ebx
@@ -295,24 +289,24 @@ main:
             mov edi, number
             mov esi, lengthNumber
             xor eax, eax
-            .cycleSummary:
+            .cycleSummarize:
                 add al, byte [edi]
                 sub al, '0'
                 inc edi
                 dec esi
-                jnz .cycleSummary
+                jnz .cycleSummarize
 
+            mov ebx, 10
+            xor ecx, ecx
             push eax
-                mov ebx, 10
-                xor ecx, ecx
-                .cycleLength:
+                .cycleGetLength:
                     xor edx, edx
                     div ebx
 
                     inc ecx
 
                     cmp eax, 0
-                    jg .cycleLength
+                    jg .cycleGetLength
             pop eax
 
             mov edi, bufferOutput
