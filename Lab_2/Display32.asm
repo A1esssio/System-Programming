@@ -64,18 +64,18 @@ section '.data' writeable
         db '4 - number digit summary', 10, 10
         db 'q / Q - quite the programm', 10
     messageOptionEnd:
-    lengthMessageOptionProgram equ messageOptionEnd - messageOptionProgram
+    kLengthMessageOptionProgram equ messageOptionEnd - messageOptionProgram
 
     messageInvalidNumberArgument:
         db 0x1B, '[H', 0x1B, '[J'
         db 'Error: choose between 1, 2, 3 or 4', 10, 10
     messageInvalidOptionEnd:
-    lengthMessageInvalidNumberArgument equ messageInvalidOptionEnd - messageInvalidNumberArgument
+    kLengthMessageInvalidNumberArgument equ messageInvalidOptionEnd - messageInvalidNumberArgument
 
     messageResult:
         db 'Result:'
     messageResultEnd:
-    lengthMessageResult equ messageResultEnd - messageResult
+    kLengthMessageResult equ messageResultEnd - messageResult
 
     terminalClear db 0x1B, '[H', 0x1B, '[J'
     newLine db 10
@@ -83,7 +83,7 @@ section '.data' writeable
     string:
         db 'bnojZeyofMUhmHwRYRnYAjmyYgV'
     stringEnd:
-    lengthString equ stringEnd - string
+    kLengthString equ stringEnd - string
 
     symbol db 's'
     quantitySymbol dd 325
@@ -93,7 +93,7 @@ section '.data' writeable
     number:
         db '5440848234'
     numberEnd:
-    lengthNumber equ numberEnd - number
+    kLengthNumber equ numberEnd - number
 
     lengthInput dd 0
     lengthOutput dd 0
@@ -105,14 +105,14 @@ section '.bss' writeable
 
 section '.error' executable
     invalidRangeOption:
-        cout messageInvalidNumberArgument, lengthMessageInvalidNumberArgument
+        cout messageInvalidNumberArgument, kLengthMessageInvalidNumberArgument
         jmp main
 
 section '.text' executable
 _start:
     cout terminalClear, 6
 main:
-    cout messageOptionProgram, lengthMessageOptionProgram
+    cout messageOptionProgram, kLengthMessageOptionProgram
 
     cin bufferInput, 256
 
@@ -160,10 +160,10 @@ main:
             ; esi (Source Index)
             ; edi (Destination Index)
             mov edi, bufferOutput
-            mov ebx, lengthString
+            mov ebx, kLengthString
             mov dword [lengthOutput], ebx
             mov esi, string
-            add esi, lengthString
+            add esi, kLengthString
             dec esi
 
             .cycleReversion:
@@ -178,7 +178,7 @@ main:
         pop esi
         pop ebx
 
-            cout messageResult, lengthMessageResult
+            cout messageResult, kLengthMessageResult
             cout newLine, 1
             cout bufferOutput, [lengthOutput]
             cout newLine, 1
@@ -227,7 +227,7 @@ main:
         pop ebx
         pop esi
 
-        cout messageResult, lengthMessageResult
+        cout messageResult, kLengthMessageResult
         cout newLine, 1
         cout bufferOutput, [lengthOutput]
         cout newLine, 1
@@ -268,7 +268,7 @@ main:
         pop ebx
         pop esi
 
-        cout messageResult, lengthMessageResult
+        cout messageResult, kLengthMessageResult
         cout newLine, 1
         cout bufferOutput, dword [lengthOutput]
         cout newLine, 1
@@ -287,7 +287,7 @@ main:
         push edi
         push ecx
             mov edi, number
-            mov esi, lengthNumber
+            mov esi, kLengthNumber
             xor eax, eax
             .cycleSummarize:
                 add al, byte [edi]
@@ -330,7 +330,7 @@ main:
         pop ebx
         pop esi
 
-        cout messageResult, lengthMessageResult
+        cout messageResult, kLengthMessageResult
         cout newLine, 1
         cout bufferOutput, [lengthOutput]
         cout newLine, 1

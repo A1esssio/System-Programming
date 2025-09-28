@@ -43,18 +43,18 @@ section '.data' writeable
         db '2 - arithmetic', 10, 10
         db 'q / Q - quite the programm', 10
     messageOptionEnd:
-    lengthMessageOptionProgram equ messageOptionEnd - messageOptionProgram
+    kLengthMessageOptionProgram equ messageOptionEnd - messageOptionProgram
 
     messageInvalidNumberArgument:
         db 0x1B, '[H', 0x1B, '[J'
         db 'Error: write 1 or 3 additional arguments', 10, 10
     messageInvalidOptionEnd:
-    lengthMessageInvalidNumberArgument equ messageInvalidOptionEnd - messageInvalidNumberArgument
+    kLengthMessageInvalidNumberArgument equ messageInvalidOptionEnd - messageInvalidNumberArgument
 
     messageResult:
         db 'Result:'
     messageResultEnd:
-    lengthMessageResult equ messageResultEnd - messageResult
+    kLengthMessageResult equ messageResultEnd - messageResult
 
     terminalClear db 0x1B, '[H', 0x1B, '[J'
     newLine db 10
@@ -62,19 +62,61 @@ section '.data' writeable
     lengthInput dd 0
     lengthOutput dd 0
 
-    symbol db '0'
-
 section '.bss' writeable
     bufferInput rb 256
     bufferOutput rb 256
     bufferCalculation rb 4
 
+    addressA rb 4
+    addressB rb 4
+    addressC rb 4
+
 section '.error' executable
     invalidNumberArgument:
-        cout messageInvalidNumberArgument, lengthMessageInvalidNumberArgument
+        cout messageInvalidNumberArgument, kLengthMessageInvalidNumberArgument
         jmp return
 
-section '.text' executable
+section '.function' executable
+    ; IfCharDigit:
+    ;     cmp [eax], '0'
+    ;     jb error
+
+    ;     cmp [eax], '9'
+    ;     ja error
+    ;     ret
+
+    ; input - address char eax
+    ; output - int ecx
+    CastCharInt:
+        push ebx
+            xor ebx, ebx
+            cmp byte [eax], '-'
+            sete bl ; if equal bl = 1, else bl = 0
+            inc eax
+
+            xor ecx, ecx
+            .cycle:
+                add ecx, eax
+                dec ecx, '0'
+                inc eax
+
+                cmp [eax], 0
+                je .cycleEnd
+
+                imul ecx, 10
+                jmp .cycle
+            .cycleEnd:
+
+            cmp bl, 1
+            jne .return
+
+            imul ecx, -1
+
+            .return:
+        pop ebx
+        ret
+
+section '.text' executable    
 _start:
     cout terminalClear, 6
 main:
@@ -92,6 +134,7 @@ main:
         cout terminalClear, 6
 
         pop eax ; get address of ./Arithmetic32
+
         pop eax ; get address of argument
         movzx eax, byte [eax] ; get the sumbol
 
@@ -129,7 +172,7 @@ main:
         
         mov dword [lengthOutput], esi
 
-        cout messageResult, lengthMessageResult
+        cout messageResult, kLengthMessageResult
         cout newLine, 1
         cout bufferOutput, [lengthOutput]
         cout newLine, 1
@@ -137,9 +180,19 @@ main:
 
         jmp return
 
+    ; (((b/a)+c)-a)
     ; get the result of an arithmetic expression
     executionSecond:
-        
+        pop eax ; get address of ./Arithmetic32
+
+        pop eax ; get address of the argument a
+        call CastCharInt
+        mov 
+
+
+        ; pop eax ; get address of the argument b
+
+        ; pop eax ; get address of the argument c
 
     return:
         mov eax, 1

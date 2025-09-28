@@ -10,13 +10,13 @@ segment readable writeable
         db '3 - number digit sum', 10
     messageOptionEnd:
 
-    lengthMessageOptionProgram = messageOptionEnd - messageOptionProgram
+    kLengthMessageOptionProgram = messageOptionEnd - messageOptionProgram
 
     messageInvalidNumberArgument:
         db 'Error: choose between 1, 2 and 3', 10, 10, 0
     messageInvalidOptionEnd:
 
-    lengthMessageInvalidNumberArgument = messageInvalidOptionEnd - messageInvalidNumberArgument
+    kLengthMessageInvalidNumberArgument = messageInvalidOptionEnd - messageInvalidNumberArgument
 
     bufferInput rb 2
     lengthInput db 0
@@ -28,7 +28,7 @@ start:
     mov rax, 1
     mov rdi, 1
     mov rsi, messageOptionProgram
-    mov rdx, lengthMessageOptionProgram
+    mov rdx, kLengthMessageOptionProgram
     0x80
 
     ; input
@@ -61,7 +61,7 @@ start:
         mov rax, 1
         mov rdi, 1
         mov rsi, messageInvalidNumberArgument
-        mov rdx, lengthMessageInvalidNumberArgument
+        mov rdx, kLengthMessageInvalidNumberArgument
         0x80
         jmp start 
     
