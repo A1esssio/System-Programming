@@ -296,9 +296,9 @@ main:
                 dec esi
                 jnz .cycleSummarize
 
-            mov ebx, 10
-            xor ecx, ecx
             push eax
+                mov ebx, 10
+                xor ecx, ecx
                 .cycleGetLength:
                     xor edx, edx
                     div ebx
@@ -312,7 +312,7 @@ main:
             mov edi, bufferOutput
             add edi, ecx
             dec edi
-            .cycleCastChar:
+            .cycleConverter:
                 xor edx, edx
                 div ebx
 
@@ -321,7 +321,7 @@ main:
                 dec edi
 
                 cmp eax, 0
-                jg .cycleCastChar
+                jg .cycleConverter
                 
             mov dword [lengthOutput], ecx
         pop ecx
