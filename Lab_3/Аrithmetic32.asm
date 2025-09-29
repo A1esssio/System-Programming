@@ -51,6 +51,12 @@ section '.data' writeable
     messageInvalidOptionEnd:
     kLengthMessageInvalidNumberArgument equ messageInvalidOptionEnd - messageInvalidNumberArgument
 
+    messageInvalidDevider:
+        db 0x1B, '[H', 0x1B, '[J'
+        db 'Error: division by 0', 10, 10
+    messageInvalidDeviderEnd:
+    kLengthMessageInvalidDevider equ messageInvalidDeviderEnd - messageInvalidDevider
+
     messageResult:
         db 'Result:'
     messageResultEnd:
@@ -67,45 +73,49 @@ section '.bss' writeable
     bufferOutput rb 256
     bufferCalculation rb 4
 
-    addressA rb 4
-    addressB rb 4
-    addressC rb 4
+    operandA rb 4
+    operandB rb 4
+    operandC rb 4
 
 section '.error' executable
     invalidNumberArgument:
         cout messageInvalidNumberArgument, kLengthMessageInvalidNumberArgument
         jmp return
+    
+    invalidDevider:
+        cout messageInvalidDevider, kLengthMessageInvalidDevider
+        jmp return
 
 section '.function' executable
-    ; IfCharDigit:
-    ;     cmp [eax], '0'
-    ;     jb error
-
-    ;     cmp [eax], '9'
-    ;     ja error
-    ;     ret
-
     ; input - address char eax
     ; output - int ecx
     CastCharInt:
         push ebx
+        push edi
+            ; check a minus
             xor ebx, ebx
             cmp byte [eax], '-'
             sete bl ; if equal bl = 1, else bl = 0
+
+            ; skip a minus
+            cmp bl, 1
+            jne .startConvert
             inc eax
 
-            xor ecx, ecx
-            .cycle:
-                add ecx, eax
-                dec ecx, '0'
+            .startConvert:
+                xor ecx, ecx
+            .cycleConvert:
+                movzx edi, byte [eax]
+                add ecx, edi
+                sub ecx, '0'
                 inc eax
 
-                cmp [eax], 0
-                je .cycleEnd
+                cmp byte [eax], 0
+                je .cycleConvertEnd
 
                 imul ecx, 10
-                jmp .cycle
-            .cycleEnd:
+                jmp .cycleConvert
+            .cycleConvertEnd:
 
             cmp bl, 1
             jne .return
@@ -113,8 +123,86 @@ section '.function' executable
             imul ecx, -1
 
             .return:
+        pop edi
         pop ebx
         ret
+    
+    ; input - int eax
+    ; output - bufferOutput
+    CastIntChar:
+    push ecx
+    push edi
+    push edx
+    push ebx
+    push esi
+        ; check a sign
+        xor ebx, ebx
+        cmp eax, 0
+        jge .positive
+        
+        ; negative
+        mov ebx, 1              ; negative flag
+        neg eax                 ; make positive
+    
+        .positive:
+            ; find number length
+            push eax
+            push ebx            ; save sign flag
+                mov ecx, 0
+                mov esi, 10
+                
+                test eax, eax   ; if zero number
+                jnz .cycleIntLen
+                mov ecx, 1      ; size 1 for zero number
+                jmp .CycleDone
+                
+                .cycleIntLen:
+                    xor edx, edx
+                    div esi
+                    inc ecx
+                    test eax, eax
+                    jnz .cycleIntLen
+                .CycleDone:
+            pop ebx             ; restore sign flag
+            pop eax
+            
+            ; consider sign in size
+            test ebx, ebx
+            jz .unsign
+            inc ecx
+            
+        .unsign:
+            push ebx            ; save sign flag
+                mov esi, 10
+                mov edi, bufferOutput
+                add edi, ecx
+                mov byte [edi], 0
+                dec edi
+                
+                .cycleConverter:
+                    xor edx, edx
+                    div esi
+                    add dl, '0'
+                    mov byte [edi], dl
+                    dec edi
+                    test eax, eax
+                    jnz .cycleConverter
+            .conversionDone:
+            pop ebx
+            
+            ; add sign
+            test ebx, ebx
+            jz .return
+            mov byte [edi], '-'
+            
+        .return:
+            mov dword [lengthOutput], ecx
+    pop esi
+    pop ebx
+    pop edx
+    pop edi
+    pop ecx
+    ret
 
 section '.text' executable    
 _start:
@@ -138,9 +226,9 @@ main:
         pop eax ; get address of argument
         movzx eax, byte [eax] ; get the sumbol
 
-        mov ebx, 10
-        xor ecx, ecx
         push eax
+            mov ebx, 10
+            xor ecx, ecx
             .cycleGetLength:
                 xor edx, edx
                 div ebx
@@ -187,12 +275,34 @@ main:
 
         pop eax ; get address of the argument a
         call CastCharInt
-        mov 
+        mov dword [operandA], ecx
 
+        pop eax ; get address of the argument b
+        call CastCharInt
+        mov dword [operandB], ecx
 
-        ; pop eax ; get address of the argument b
+        pop eax ; get address of the argument c
+        call CastCharInt
+        mov dword [operandC], ecx
 
-        ; pop eax ; get address of the argument c
+        mov eax, dword [operandB]
+        mov ebx, dword [operandA]
+        test ebx, ebx
+        jz invalidDevider
+        cdq
+        idiv ebx
+
+        add eax, dword [operandC]
+
+        sub eax, dword [operandA]
+
+        call CastIntChar
+
+        cout messageResult, kLengthMessageResult
+        cout newLine, 1
+        cout bufferOutput, [lengthOutput]
+        cout newLine, 1
+        cout newLine, 1
 
     return:
         mov eax, 1
