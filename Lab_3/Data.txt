@@ -1,0 +1,7 @@
+total 40K
+-rwxrwxrwx 1 codespace codespace  16K Sep 29 19:44 Arithmetic
+-rw-rw-rw- 1 codespace codespace  624 Sep 29 19:43 Arithmetic.c
+-rw-rw-rw- 1 codespace codespace    0 Sep 29 20:31 Data.txt
+-rw-rw-rw- 1 codespace codespace    0 Sep 29 20:30 Report_Lab_2.ipynb
+-rwxrwxrwx 1 codespace codespace 8.7K Sep 29 19:50 Аrithmetic32
+-rw-rw-rw- 1 codespace codespace 6.9K Sep 29 20:29 Аrithmetic32.asm
