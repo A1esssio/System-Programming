@@ -37,20 +37,6 @@ macro cin _bufferInput, _length {
 }
 
 section '.data' writeable
-    messageOptionProgram:
-        db 'Choose one program:', 10
-        db '1 - argument ASCII code', 10
-        db '2 - arithmetic', 10, 10
-        db 'q / Q - quite the programm', 10
-    messageOptionEnd:
-    kLengthMessageOptionProgram equ messageOptionEnd - messageOptionProgram
-
-    messageInvalidNumberArgument:
-        db 0x1B, '[H', 0x1B, '[J'
-        db 'Error: write 1 or 3 additional arguments', 10, 10
-    messageInvalidOptionEnd:
-    kLengthMessageInvalidNumberArgument equ messageInvalidOptionEnd - messageInvalidNumberArgument
-
     messageInvalidDevider:
         db 0x1B, '[H', 0x1B, '[J'
         db 'Error: division by 0', 10, 10
@@ -77,11 +63,7 @@ section '.bss' writeable
     operandB rb 4
     operandC rb 4
 
-section '.error' executable
-    invalidNumberArgument:
-        cout messageInvalidNumberArgument, kLengthMessageInvalidNumberArgument
-        jmp return
-    
+section '.error' executable    
     invalidDevider:
         cout messageInvalidDevider, kLengthMessageInvalidDevider
         jmp return
