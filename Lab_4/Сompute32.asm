@@ -431,7 +431,6 @@ main:
 
             mov eax, ecx
             xor ecx, ecx
-
             .cycleMirror:
                 imul ecx, 10
                 xor edx, edx
